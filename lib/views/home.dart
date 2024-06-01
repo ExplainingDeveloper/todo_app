@@ -41,33 +41,30 @@ class _HomeScreenState extends State<HomeScreen> {
         },
         child: const Icon(Icons.add),
       ),
-      bottomNavigationBar: BottomAppBar(
-        shape: const CircularNotchedRectangle(),
-        notchMargin: 6.0,
-        clipBehavior: Clip.antiAlias,
-        child: SizedBox(
-          height: kBottomNavigationBarHeight,
-          child: BottomNavigationBar(
-            currentIndex: _selectedIndex,
-            selectedItemColor: Colors.brown,
-            unselectedItemColor: Colors.black,
-            onTap: (index) {
-              setState(() {
-                _selectedIndex = index;
-                pageController.jumpToPage(index);
-              });
-            },
-            items: const [
-              BottomNavigationBarItem(
-                icon: Icon(CupertinoIcons.square_list),
-                label: '',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(CupertinoIcons.tag),
-                label: '',
-              ),
-            ],
-          ),
+      bottomNavigationBar: ClipRRect(
+        borderRadius:
+            BorderRadius.circular(4.0), // Adjust border radius as needed
+        child: BottomNavigationBar(
+          currentIndex: _selectedIndex,
+          selectedItemColor: Colors.brown,
+          unselectedItemColor: Colors.black,
+          onTap: (index) {
+            setState(() {
+              _selectedIndex = index;
+              pageController.jumpToPage(index);
+            });
+          },
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(CupertinoIcons.square_list,
+                  size: 20.0), // Reduced icon size
+              label: '', // Remove label if not essential
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(CupertinoIcons.tag, size: 20.0), // Reduced icon size
+              label: '', // Remove label if not essential
+            ),
+          ],
         ),
       ),
       body: PageView(

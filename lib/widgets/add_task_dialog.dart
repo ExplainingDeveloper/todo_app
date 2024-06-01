@@ -127,7 +127,7 @@ class _AddTaskAlertDialogState extends State<AddTaskAlertDialog> {
             Navigator.of(context, rootNavigator: true).pop();
           },
           style: ElevatedButton.styleFrom(
-            primary: Colors.grey,
+            backgroundColor: Colors.grey,
           ),
           child: const Text('Cancel'),
         ),

@@ -8,7 +8,11 @@ class UpdateTaskAlertDialog extends StatefulWidget {
   final String taskId, taskName, taskDesc, taskTag;
 
   const UpdateTaskAlertDialog(
-      {Key? Key, required this.taskId, required this.taskName, required this.taskDesc, required this.taskTag})
+      {Key? Key,
+      required this.taskId,
+      required this.taskName,
+      required this.taskDesc,
+      required this.taskTag})
       : super(key: Key);
 
   @override
@@ -49,7 +53,8 @@ class _UpdateTaskAlertDialogState extends State<UpdateTaskAlertDialog> {
                     horizontal: 20,
                     vertical: 20,
                   ),
-                  icon: const Icon(CupertinoIcons.square_list, color: Colors.brown),
+                  icon: const Icon(CupertinoIcons.square_list,
+                      color: Colors.brown),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15),
                   ),
@@ -66,7 +71,8 @@ class _UpdateTaskAlertDialogState extends State<UpdateTaskAlertDialog> {
                     horizontal: 20,
                     vertical: 20,
                   ),
-                  icon: const Icon(CupertinoIcons.bubble_left_bubble_right, color: Colors.brown),
+                  icon: const Icon(CupertinoIcons.bubble_left_bubble_right,
+                      color: Colors.brown),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15),
                   ),
@@ -125,7 +131,7 @@ class _UpdateTaskAlertDialogState extends State<UpdateTaskAlertDialog> {
             Navigator.of(context, rootNavigator: true).pop();
           },
           style: ElevatedButton.styleFrom(
-            primary: Colors.grey,
+            backgroundColor: Colors.grey,
           ),
           child: const Text('Cancel'),
         ),
@@ -134,7 +140,9 @@ class _UpdateTaskAlertDialogState extends State<UpdateTaskAlertDialog> {
             final taskName = taskNameController.text;
             final taskDesc = taskDescController.text;
             var taskTag = '';
-            selectedValue == '' ? taskTag = widget.taskTag : taskTag = selectedValue;
+            selectedValue == ''
+                ? taskTag = widget.taskTag
+                : taskTag = selectedValue;
             _updateTasks(taskName, taskDesc, taskTag);
             Navigator.of(context, rootNavigator: true).pop();
           },
@@ -148,7 +156,8 @@ class _UpdateTaskAlertDialogState extends State<UpdateTaskAlertDialog> {
     var collection = FirebaseFirestore.instance.collection('tasks');
     collection
         .doc(widget.taskId)
-        .update({'taskName': taskName, 'taskDesc': taskDesc, 'taskTag': taskTag})
+        .update(
+            {'taskName': taskName, 'taskDesc': taskDesc, 'taskTag': taskTag})
         .then(
           (_) => Fluttertoast.showToast(
               msg: "Task updated successfully",

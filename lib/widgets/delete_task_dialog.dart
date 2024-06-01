@@ -45,7 +45,7 @@ class _DeleteTaskDialogState extends State<DeleteTaskDialog> {
             Navigator.of(context, rootNavigator: true).pop();
           },
           style: ElevatedButton.styleFrom(
-            primary: Colors.grey,
+            backgroundColor: Colors.grey,
           ),
           child: const Text('Cancel'),
         ),
@@ -55,7 +55,7 @@ class _DeleteTaskDialogState extends State<DeleteTaskDialog> {
             Navigator.of(context, rootNavigator: true).pop();
           },
           style: ElevatedButton.styleFrom(
-            primary: Colors.brown,
+            backgroundColor: Colors.brown,
           ),
           child: const Text('Delete'),
         ),
