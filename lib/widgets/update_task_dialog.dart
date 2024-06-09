@@ -1,8 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:todo_app/utils/constants.dart';
+import 'package:todo_app/utils/databaseUtil.dart';
 
 class UpdateTaskAlertDialog extends StatefulWidget {
   final String taskId, taskName, taskDesc, taskTag;
@@ -37,7 +40,7 @@ class _UpdateTaskAlertDialogState extends State<UpdateTaskAlertDialog> {
       title: const Text(
         'Update Task',
         textAlign: TextAlign.center,
-        style: TextStyle(fontSize: 16, color: Colors.brown),
+        style: TextStyle(fontSize: 16, color: Colors.black),
       ),
       content: SizedBox(
         height: height * 0.35,
@@ -94,11 +97,6 @@ class _UpdateTaskAlertDialogState extends State<UpdateTaskAlertDialog> {
                       ),
                       isExpanded: true,
                       value: widget.taskTag,
-                      buttonHeight: 60,
-                      buttonPadding: const EdgeInsets.only(left: 20, right: 10),
-                      dropdownDecoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                      ),
                       items: taskTags
                           .map(
                             (item) => DropdownMenuItem<String>(
@@ -131,7 +129,7 @@ class _UpdateTaskAlertDialogState extends State<UpdateTaskAlertDialog> {
             Navigator.of(context, rootNavigator: true).pop();
           },
           style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.grey,
+            backgroundColor: Colors.white,
           ),
           child: const Text('Cancel'),
         ),
@@ -143,38 +141,18 @@ class _UpdateTaskAlertDialogState extends State<UpdateTaskAlertDialog> {
             selectedValue == ''
                 ? taskTag = widget.taskTag
                 : taskTag = selectedValue;
-            _updateTasks(taskName, taskDesc, taskTag);
+
+            var data = {
+              'taskName': taskName,
+              'taskDesc': taskDesc,
+              'taskTag': taskTag
+            };
+            Databaseutil().updateTask(widget.taskId, data);
             Navigator.of(context, rootNavigator: true).pop();
           },
           child: const Text('Update'),
         ),
       ],
     );
-  }
-
-  Future _updateTasks(String taskName, String taskDesc, String taskTag) async {
-    var collection = FirebaseFirestore.instance.collection('tasks');
-    collection
-        .doc(widget.taskId)
-        .update(
-            {'taskName': taskName, 'taskDesc': taskDesc, 'taskTag': taskTag})
-        .then(
-          (_) => Fluttertoast.showToast(
-              msg: "Task updated successfully",
-              toastLength: Toast.LENGTH_LONG,
-              gravity: ToastGravity.SNACKBAR,
-              backgroundColor: Colors.black54,
-              textColor: Colors.white,
-              fontSize: 14.0),
-        )
-        .catchError(
-          (error) => Fluttertoast.showToast(
-              msg: "Failed: $error",
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.SNACKBAR,
-              backgroundColor: Colors.black54,
-              textColor: Colors.white,
-              fontSize: 14.0),
-        );
   }
 }

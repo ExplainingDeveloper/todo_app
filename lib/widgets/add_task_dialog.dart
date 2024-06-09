@@ -1,7 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:todo_app/utils/constants.dart';
+import 'package:todo_app/utils/databaseUtil.dart';
 
 class AddTaskAlertDialog extends StatefulWidget {
   const AddTaskAlertDialog({
@@ -23,11 +26,12 @@ class _AddTaskAlertDialogState extends State<AddTaskAlertDialog> {
     var width = MediaQuery.of(context).size.width;
     var height = MediaQuery.of(context).size.height;
     return AlertDialog(
+      backgroundColor: Colors.white,
       scrollable: true,
       title: const Text(
         'New Task',
         textAlign: TextAlign.center,
-        style: TextStyle(fontSize: 16, color: Colors.brown),
+        style: TextStyle(fontSize: 16, color: Colors.black),
       ),
       content: SizedBox(
         height: height * 0.35,
@@ -45,7 +49,8 @@ class _AddTaskAlertDialogState extends State<AddTaskAlertDialog> {
                   ),
                   hintText: 'Task',
                   hintStyle: const TextStyle(fontSize: 14),
-                  icon: const Icon(CupertinoIcons.square_list, color: Colors.brown),
+                  icon: const Icon(CupertinoIcons.square_list,
+                      color: Colors.brown),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15),
                   ),
@@ -64,7 +69,8 @@ class _AddTaskAlertDialogState extends State<AddTaskAlertDialog> {
                   ),
                   hintText: 'Description',
                   hintStyle: const TextStyle(fontSize: 14),
-                  icon: const Icon(CupertinoIcons.bubble_left_bubble_right, color: Colors.brown),
+                  icon: const Icon(CupertinoIcons.bubble_left_bubble_right,
+                      color: Colors.brown),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15),
                   ),
@@ -89,11 +95,7 @@ class _AddTaskAlertDialogState extends State<AddTaskAlertDialog> {
                         'Add a task tag',
                         style: TextStyle(fontSize: 14),
                       ),
-                      buttonHeight: 60,
-                      buttonPadding: const EdgeInsets.only(left: 20, right: 10),
-                      dropdownDecoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                      ),
+
                       // validator: (value) => value == null
                       //     ? 'Please select the task tag' : null,
                       items: taskTags
@@ -109,7 +111,8 @@ class _AddTaskAlertDialogState extends State<AddTaskAlertDialog> {
                             ),
                           )
                           .toList(),
-                      onChanged: (String? value) => setState(() {
+                      onChanged: (String? value) => setState(
+                        () {
                           if (value != null) selectedValue = value;
                         },
                       ),
@@ -127,7 +130,7 @@ class _AddTaskAlertDialogState extends State<AddTaskAlertDialog> {
             Navigator.of(context, rootNavigator: true).pop();
           },
           style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.grey,
+            backgroundColor: Colors.white,
           ),
           child: const Text('Cancel'),
         ),
@@ -145,18 +148,18 @@ class _AddTaskAlertDialogState extends State<AddTaskAlertDialog> {
     );
   }
 
-  Future _addTasks({required String taskName, required String taskDesc, required String taskTag}) async {
-    DocumentReference docRef = await FirebaseFirestore.instance.collection('tasks').add(
-      {
-        'taskName': taskName,
-        'taskDesc': taskDesc,
-        'taskTag': taskTag,
-      },
-    );
-    String taskId = docRef.id;
-    await FirebaseFirestore.instance.collection('tasks').doc(taskId).update(
-      {'id': taskId},
-    );
+  final currentUserUid = FirebaseAuth.instance.currentUser!.uid;
+
+  Future _addTasks(
+      {required String taskName,
+      required String taskDesc,
+      required String taskTag}) async {
+    var data = {
+      'taskName': taskName,
+      'taskDesc': taskDesc,
+      'taskTag': taskTag,
+    };
+    Databaseutil().addTask(data);
     _clearAll();
   }
 

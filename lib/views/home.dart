@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:todo_app/utils/colors.dart';
 import '../widgets/add_task_dialog.dart';
 import 'tasks.dart';
 import 'categories.dart';
@@ -18,19 +19,28 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
       appBar: AppBar(
+        backgroundColor: Colors.black,
         centerTitle: true,
-        title: const Text("To-Do List"),
+        title: const Text(
+          "To-Do List",
+          style: TextStyle(color: Colors.white),
+        ),
         actions: [
           IconButton(
             onPressed: () {},
-            icon: const Icon(CupertinoIcons.calendar),
+            icon: const Icon(
+              CupertinoIcons.calendar,
+              color: Colors.white,
+            ),
           ),
         ],
       ),
       extendBody: true,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
+        backgroundColor: AppColors.purpleColor,
         onPressed: () {
           showDialog(
             context: context,
@@ -39,15 +49,19 @@ class _HomeScreenState extends State<HomeScreen> {
             },
           );
         },
-        child: const Icon(Icons.add),
+        child: const Icon(
+          Icons.add,
+          color: Colors.black,
+        ),
       ),
       bottomNavigationBar: ClipRRect(
         borderRadius:
             BorderRadius.circular(4.0), // Adjust border radius as needed
         child: BottomNavigationBar(
+          backgroundColor: Colors.black,
           currentIndex: _selectedIndex,
-          selectedItemColor: Colors.brown,
-          unselectedItemColor: Colors.black,
+          selectedItemColor: Colors.white,
+          unselectedItemColor: Colors.grey,
           onTap: (index) {
             setState(() {
               _selectedIndex = index;
@@ -57,11 +71,12 @@ class _HomeScreenState extends State<HomeScreen> {
           items: const [
             BottomNavigationBarItem(
               icon: Icon(CupertinoIcons.square_list,
-                  size: 20.0), // Reduced icon size
+                  color: Colors.white, size: 20.0), // Reduced icon size
               label: '', // Remove label if not essential
             ),
             BottomNavigationBarItem(
-              icon: Icon(CupertinoIcons.tag, size: 20.0), // Reduced icon size
+              icon: Icon(CupertinoIcons.tag,
+                  color: Colors.white, size: 20.0), // Reduced icon size
               label: '', // Remove label if not essential
             ),
           ],

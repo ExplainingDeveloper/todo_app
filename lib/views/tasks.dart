@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:todo_app/utils/constants.dart';
+import 'package:todo_app/utils/databaseUtil.dart';
 import 'package:todo_app/widgets/update_task_dialog.dart';
 
 import '../utils/colors.dart';
@@ -14,26 +17,31 @@ class Tasks extends StatefulWidget {
 
 class _TasksState extends State<Tasks> {
   final fireStore = FirebaseFirestore.instance;
-
+  final currentUserUid = FirebaseAuth.instance.currentUser!.uid;
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.all(10.0),
       child: StreamBuilder<QuerySnapshot>(
-        stream: fireStore.collection('tasks').snapshots(),
+        stream: Databaseutil().readTask(currentUserUid),
         builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return const Text('No tasks to display');
+          if (!snapshot.hasData || snapshot.data!.size == 0) {
+            return Center(
+                child: Image.asset(
+              'images/home.png',
+              width: 227,
+            ));
           } else {
             return ListView(
               children: snapshot.data!.docs.map((DocumentSnapshot document) {
-                Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
-                Color taskColor = AppColors.blueShadeColor;
+                Map<String, dynamic> data =
+                    document.data()! as Map<String, dynamic>;
+                Color taskColor = AppColors.whiteColor;
                 var taskTag = data['taskTag'];
                 if (taskTag == 'Work') {
-                  taskColor = AppColors.salmonColor;
+                  taskColor = AppColors.whiteColor;
                 } else if (taskTag == 'School') {
-                  taskColor = AppColors.greenShadeColor;
+                  taskColor = AppColors.whiteColor;
                 }
                 return Container(
                   height: 100,
@@ -43,7 +51,7 @@ class _TasksState extends State<Tasks> {
                     color: Colors.white,
                     boxShadow: const [
                       BoxShadow(
-                        color: AppColors.shadowColor,
+                        color: AppColors.whiteColor,
                         blurRadius: 5.0,
                         offset: Offset(0, 5), // shadow direction: bottom right
                       ),
@@ -80,7 +88,12 @@ class _TasksState extends State<Tasks> {
                                 const Duration(seconds: 0),
                                 () => showDialog(
                                   context: context,
-                                  builder: (context) => UpdateTaskAlertDialog(taskId: taskId, taskName: taskName, taskDesc: taskDesc, taskTag: taskTag,),
+                                  builder: (context) => UpdateTaskAlertDialog(
+                                    taskId: taskId,
+                                    taskName: taskName,
+                                    taskDesc: taskDesc,
+                                    taskTag: taskTag,
+                                  ),
                                 ),
                               );
                             },
@@ -91,14 +104,15 @@ class _TasksState extends State<Tasks> {
                               'Delete',
                               style: TextStyle(fontSize: 13.0),
                             ),
-                            onTap: (){
+                            onTap: () {
                               String taskId = (data['id']);
                               String taskName = (data['taskName']);
                               Future.delayed(
                                 const Duration(seconds: 0),
-                                    () => showDialog(
+                                () => showDialog(
                                   context: context,
-                                  builder: (context) => DeleteTaskDialog(taskId: taskId, taskName:taskName),
+                                  builder: (context) => DeleteTaskDialog(
+                                      taskId: taskId, taskName: taskName),
                                 ),
                               );
                             },

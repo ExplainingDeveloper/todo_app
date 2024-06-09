@@ -1,11 +1,9 @@
 import 'dart:ui';
 
-class AppColors{
-  static const Color shadowColor = Color(0xFFe8e8e8);
-  static const Color redShadeColor = Color(0xFF9c677d);
-  static const Color salmonColor = Color(0xFFef8076);
-  static const Color greenShadeColor = Color(0xFF667b51);
-  static const Color blueShadeColor = Color(0xFF5871b6);
+import 'package:flutter/material.dart';
 
-
+class AppColors {
+  static const Color purpleColor = Color(0xff8687E7);
+  static const Color greyColor = Color(0xff979797);
+  static const Color whiteColor = Colors.white;
 }
